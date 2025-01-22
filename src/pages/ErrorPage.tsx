@@ -1,6 +1,5 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
-import { useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
 interface RouteError {
@@ -9,12 +8,15 @@ interface RouteError {
   message?: string;
 }
 
-const ErrorPage: React.FC = () => {
+const ErrorPage: React.FC<{ message?: string }> = ({ message }) => {
   const { theme } = useTheme();
-  const error = useRouteError() as RouteError;
-  const status = error?.status || "Error";
-  const message =
-    error?.statusText || error?.message || "Something went wrong.";
+  const routeError = useRouteError() as RouteError;
+  const status = routeError?.status || "Error";
+  const statusMessage =
+    message ||
+    routeError?.statusText ||
+    routeError?.message ||
+    "Something went wrong.";
 
   return (
     <div
@@ -25,12 +27,12 @@ const ErrorPage: React.FC = () => {
       } transition-colors px-4`}
     >
       <ExclamationCircleIcon className="h-20 w-20 text-red-500 mb-6 animate-pulse" />
-      <h1 className="text-6xl font-bold mb-4">{status}</h1>
-      <p className="text-lg mb-8">{message}</p>
+      <h1 className="text-5xl font-bold mb-4">{status}</h1>
+      <p className="text-lg mb-6">{statusMessage}</p>
       <div className="flex gap-4">
         <Link
           to="/"
-          className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
+          className="px-6 py-3 bg-primary-light text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors"
         >
           Go to Home
         </Link>
