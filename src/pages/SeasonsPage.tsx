@@ -69,7 +69,6 @@ const SeasonsPage: React.FC = () => {
             disabled={page === 0}
             className="p-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
-            <span className="sr-only">Previous</span>
             <ChevronLeftIcon className="w-6 h-6" />
           </button>
           <span>
@@ -82,7 +81,6 @@ const SeasonsPage: React.FC = () => {
             disabled={page + 1 === totalPages}
             className="p-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
-            <span className="sr-only">Next</span>
             <ChevronRightIcon className="w-6 h-6" />
           </button>
         </div>
