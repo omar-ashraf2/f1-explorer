@@ -1,20 +1,37 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../api/axiosInstance";
 
-const fetchRaces = async (season: string, page: number, limit: number) => {
+type Race = {
+  raceName: string;
+  date: string;
+  Circuit: {
+    circuitName: string;
+  };
+};
+
+type FetchRacesResponse = {
+  races: Race[];
+  total: number;
+};
+
+const fetchRaces = async (
+  season: string,
+  page: number,
+  limit: number
+): Promise<FetchRacesResponse> => {
   const offset = page * limit;
   const response = await axiosInstance.get(`/${season}/races.json`, {
     params: { limit, offset },
   });
-  console.log(response);
+
   return {
     races: response.data.MRData.RaceTable.Races,
-    total: response.data.MRData.total,
+    total: parseInt(response.data.MRData.total, 10),
   };
 };
 
 export const useRaces = (season: string, page: number, limit: number) => {
-  return useQuery(
+  return useQuery<FetchRacesResponse>(
     ["races", season, page],
     () => fetchRaces(season, page, limit),
     {

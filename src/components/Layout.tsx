@@ -1,7 +1,7 @@
 import { Outlet, useNavigation } from "react-router-dom";
 import Footer from "./common/Footer";
 import Navbar from "./common/Navbar";
-import LoadingSpinner from "./LoadingSpinner";
+import { LoadingSpinner } from "./ui";
 
 const Layout: React.FC = () => {
   const navigation = useNavigation();
