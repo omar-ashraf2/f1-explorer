@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/dateFormatter";
+import { TRace } from "../../hooks/useRaces";
 
 type RacesCardProps = {
-  race: {
-    raceName: string;
-    date: string;
-    Circuit: {
-      circuitName: string;
-    };
-  };
+  race: TRace;
   view: "list" | "card";
 };
 
@@ -29,7 +24,7 @@ const RacesCard: React.FC<RacesCardProps> = ({ race, view }) => {
         {formatDate(race.date)}
       </p>
       <Link
-        to={`/races/${race.raceName}`}
+        to={`/seasons/${race.season}/races/${race.round}`}
         className="text-primary-light hover:text-primary-dark mt-4 inline-block"
       >
         View Details →

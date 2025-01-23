@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../api/axiosInstance";
 
-type Race = {
+export type TRace = {
   raceName: string;
   date: string;
   Circuit: {
     circuitName: string;
   };
+  round: string;
+  season: string;
 };
 
 type FetchRacesResponse = {
-  races: Race[];
+  races: TRace[];
   total: number;
 };
 
