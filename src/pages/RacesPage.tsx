@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import RacesCard from "../components/common/RacesCard";
 import { LoadingSpinner, Pagination, ViewToggle } from "../components/ui";
+import { usePinnedRaces } from "../context/PinnedRacesContext";
 import { useRaces } from "../hooks/useRaces";
 import ErrorPage from "./ErrorPage";
 
@@ -13,6 +14,24 @@ const RacesPage: React.FC = () => {
   const limit = 15;
 
   const { data, isLoading, isError } = useRaces(season || "", page, limit);
+  const { pinnedRaces, addPinnedRace, removePinnedRace, clearPinnedRaces } =
+    usePinnedRaces();
+
+  const [visiblePinnedRaces, setVisiblePinnedRaces] = useState<string[]>([]);
+
+  const { races = [], total = 0 } = data || {};
+  const totalPages = Math.ceil(total / limit);
+
+  useEffect(() => {
+    const seasonPinnedRaces = pinnedRaces[season || ""] || [];
+    setVisiblePinnedRaces(seasonPinnedRaces);
+  }, [pinnedRaces, season]);
+
+  if (!isLoading && races.length === 0) {
+    return (
+      <ErrorPage message="No races data is available for this season. Please check back later." />
+    );
+  }
 
   if (isError) {
     return (
@@ -20,14 +39,28 @@ const RacesPage: React.FC = () => {
     );
   }
 
-  const { races = [], total = 0 } = data || {};
-  const totalPages = Math.ceil(total / limit);
+  const pinnedRacesData = races.filter((race) =>
+    visiblePinnedRaces.includes(race.round)
+  );
+  const otherRacesData = races.filter(
+    (race) => !visiblePinnedRaces.includes(race.round)
+  );
 
-  if (!isLoading && races.length === 0) {
-    return (
-      <ErrorPage message="No races data is available for this season. Please check back later." />
-    );
-  }
+  const handleAddToPinned = (raceId: string) => {
+    addPinnedRace(season || "", raceId);
+
+    setTimeout(() => {
+      setVisiblePinnedRaces((prev) => [...prev, raceId]);
+    }, 300);
+  };
+
+  const handleRemoveFromPinned = (raceId: string) => {
+    setVisiblePinnedRaces((prev) => prev.filter((id) => id !== raceId));
+
+    setTimeout(() => {
+      removePinnedRace(season || "", raceId);
+    }, 300);
+  };
 
   return (
     <div className="py-4">
@@ -44,20 +77,68 @@ const RacesPage: React.FC = () => {
         />
       </div>
 
+      {pinnedRacesData.length > 0 && (
+        <div className="mb-4 flex justify-between items-center">
+          <h2 className="text-xl font-bold">Pinned Races</h2>
+          <button
+            onClick={() => {
+              clearPinnedRaces(season || "");
+              setVisiblePinnedRaces([]);
+            }}
+            className="bg-primary-light dark:bg-primary-dark text-white px-4 py-2 rounded-md hover:bg-primary-dark dark:hover:bg-primary-light transition-colors"
+          >
+            Clear All Pinned
+          </button>
+        </div>
+      )}
+
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div
-          className={`grid gap-6 ${
-            view === "list"
-              ? "grid-cols-1"
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
-          }`}
-        >
-          {races.map((race, index) => (
-            <RacesCard key={index} race={race} view={view} />
-          ))}
-        </div>
+        <>
+          {pinnedRacesData.length > 0 && (
+            <div className="mb-4">
+              <div
+                className={`grid gap-6 ${
+                  view === "list"
+                    ? "grid-cols-1"
+                    : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                }`}
+              >
+                {pinnedRacesData.map((race) => (
+                  <RacesCard
+                    key={race.round}
+                    race={race}
+                    view={view}
+                    onPinToggle={handleRemoveFromPinned}
+                    isPinned
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h2 className="text-xl font-bold mb-4">All Races</h2>
+            <div
+              className={`grid gap-6 ${
+                view === "list"
+                  ? "grid-cols-1"
+                  : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+              }`}
+            >
+              {otherRacesData.map((race) => (
+                <RacesCard
+                  key={race.round}
+                  race={race}
+                  view={view}
+                  onPinToggle={handleAddToPinned}
+                  isPinned={false}
+                />
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
