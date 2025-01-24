@@ -11,11 +11,11 @@ const Layout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {navigation.state === "loading" && <LoadingSpinner />}
-      <Navbar />
+      <Navbar isHome={pathname === "/"} />
       <main
         className={`flex-grow ${
           pathname !== "/" ? "container px-4 mx-auto" : ""
-        } `}
+        }`}
       >
         {pathname !== "/" && (
           <div className="mt-4 mb-6">

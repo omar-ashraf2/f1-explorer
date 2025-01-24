@@ -1,17 +1,43 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  isHome: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isHome }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!isHome) {
+      setIsScrolled(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHome]);
+
   return (
-    <nav className="bg-gray-100 dark:bg-gray-800 text-text-light dark:text-text-dark shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+    <nav
+      className={`${
+        isHome ? "fixed left-0" : "sticky"
+      } top-0  w-full z-50 transition-all duration-300 ease-in-out ${
+        isScrolled ? "bg-gray-100 dark:bg-gray-800 shadow-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link
           to="/"
           className="text-2xl font-bold text-primary-light dark:text-primary-dark font-orbitron"
         >
           F1 Explorer
         </Link>
-
         <ThemeToggle />
       </div>
     </nav>
