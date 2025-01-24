@@ -30,7 +30,7 @@ const RacesPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="py-4">
       <h1 className="text-3xl font-bold mb-6 text-center font-orbitron">
         Races for {season} Season
       </h1>
