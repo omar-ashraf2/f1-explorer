@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
-
 interface NavbarProps {
   isHome: boolean;
 }
-
 const Navbar: React.FC<NavbarProps> = ({ isHome }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -16,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ isHome }) => {
     }
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 150);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -27,8 +25,8 @@ const Navbar: React.FC<NavbarProps> = ({ isHome }) => {
     <nav
       className={`${
         isHome ? "fixed left-0" : "sticky"
-      } top-0  w-full z-50 transition-all duration-300 ease-in-out ${
-        isScrolled ? "bg-gray-100 dark:bg-gray-800 shadow-lg" : "bg-transparent"
+      } top-0 w-full z-50 transition-all duration-300 ease-in-out ${
+        isScrolled ? "bg-background-dark shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
