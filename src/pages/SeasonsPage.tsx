@@ -31,7 +31,7 @@ const SeasonsPage: React.FC = () => {
         Formula One Seasons
       </h1>
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center max-md:flex-wrap gap-2 mb-6">
         <ViewToggle currentView={view} onToggle={setView} />
         <Pagination
           currentPage={page}
@@ -46,7 +46,9 @@ const SeasonsPage: React.FC = () => {
       ) : (
         <div
           className={`grid gap-4 ${
-            view === "list" ? "grid-cols-1" : "card-grid-seasons"
+            view === "list"
+              ? "grid-cols-1"
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
           }`}
         >
           {seasons.map((season: Season) => (

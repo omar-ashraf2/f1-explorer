@@ -11,14 +11,6 @@ body {
   @apply bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark;
 }
 
-.card-grid-seasons {
-  @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
-}
-
-.card-grid-races {
-  @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
-}
-
 .season-link {
   @apply flex items-center justify-center w-9 h-9 rounded-full bg-primary-light dark:bg-primary-dark hover:bg-primary-dark dark:hover:bg-primary-light transition-transform duration-300 transform hover:scale-110;
 }

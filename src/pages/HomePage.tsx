@@ -14,20 +14,20 @@ const HomePage: React.FC = () => {
 
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 flex justify-center items-center">
-          <div className="w-96 h-96 rounded-full bg-primary-dark opacity-40"></div>
+          <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-primary-dark opacity-40"></div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center px-6">
-          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 font-orbitron text-primary-light drop-shadow-md">
+          <h1 className="text-4xl md:text-7xl font-extrabold mb-6 font-orbitron text-primary-light drop-shadow-md">
             Formula One Explorer
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-10 font-orbitron font-semibold text-white drop-shadow-lg">
+          <p className=" md:text-xl max-w-2xl mb-10 font-orbitron font-semibold text-white drop-shadow-lg">
             Dive into the world of Formula 1 <br /> Explore seasons, races, and
             drivers like never before.
           </p>
           <Link
             to="/seasons"
-            className="px-8 py-4 bg-primary-dark text-background-light rounded-full text-lg font-semibold hover:bg-primary-dark hover:dark:bg-primary-light transition-colors shadow-lg"
+            className="px-8 py-4 bg-primary-dark text-background-light rounded-full text-sm md:text-lg font-semibold hover:bg-primary-dark hover:dark:bg-primary-light transition-colors shadow-lg"
           >
             Explore Seasons
           </Link>

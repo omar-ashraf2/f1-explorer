@@ -41,7 +41,7 @@ const RaceDetailsPage: React.FC = () => {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
           Participating Drivers
         </h2>
         <div className="overflow-x-auto rounded-lg shadow-md border border-accent-light dark:border-accent-dark">
@@ -52,7 +52,7 @@ const RaceDetailsPage: React.FC = () => {
                   (header, index) => (
                     <th
                       key={index}
-                      className="p-4 font-orbitron text-sm uppercase tracking-wider"
+                      className="p-4 font-orbitron text-xs sm:text-sm uppercase tracking-wider"
                     >
                       {header}
                     </th>
@@ -77,14 +77,18 @@ const RaceDetailsPage: React.FC = () => {
                         : ""
                     } hover:bg-secondary-light dark:hover:bg-secondary-dark`}
                   >
-                    <td className="p-3 font-bold">{driver.position}</td>
-                    <td className="p-3 font-semibold">
+                    <td className="p-3 text-xs sm:text-sm font-bold">
+                      {driver.position}
+                    </td>
+                    <td className="p-3 text-xs sm:text-sm font-semibold">
                       {`${driver.givenName} ${driver.familyName}`}
                     </td>
-                    <td className="p-3">{driver.team}</td>
-                    <td className="p-3">{driver.nationality}</td>
+                    <td className="p-3 text-xs sm:text-sm">{driver.team}</td>
+                    <td className="p-3 text-xs sm:text-sm">
+                      {driver.nationality}
+                    </td>
                     <td
-                      className={`p-3 font-semibold ${
+                      className={`p-3 text-xs sm:text-sm font-semibold ${
                         driver.status !== "Finished"
                           ? "text-primary-dark"
                           : "text-success"
@@ -100,8 +104,8 @@ const RaceDetailsPage: React.FC = () => {
         </div>
       </div>
 
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
+      <div className="overflow-x-auto">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
           Driver Performances Chart
         </h2>
         <DriverPerformanceChart drivers={drivers} />

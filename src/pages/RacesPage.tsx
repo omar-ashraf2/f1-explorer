@@ -66,7 +66,7 @@ const RacesPage: React.FC = () => {
         Races for {season} Season
       </h1>
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center max-md:flex-wrap gap-2 mb-6">
         <ViewToggle currentView={view} onToggle={setView} />
         <Pagination
           currentPage={page}
@@ -80,6 +80,7 @@ const RacesPage: React.FC = () => {
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Favorite Races</h2>
           <button
+          title="Clear All Pinned Races For This Season"
             onClick={() => {
               clearPinnedRaces(season || "");
               setVisiblePinnedRaces([]);
@@ -101,7 +102,7 @@ const RacesPage: React.FC = () => {
                 className={`grid gap-4 ${
                   view === "list"
                     ? "grid-cols-1 sm:grid-cols-2"
-                    : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                 }`}
               >
                 {pinnedRacesData.map((race) => (
@@ -121,7 +122,9 @@ const RacesPage: React.FC = () => {
             <h2 className="text-2xl font-bold mb-4">All Races</h2>
             <div
               className={`grid gap-4 ${
-                view === "list" ? "grid-cols-1" : "card-grid-races"
+                view === "list"
+                  ? "grid-cols-1"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
               }`}
             >
               {otherRacesData.map((race) => (

@@ -9,7 +9,6 @@ interface DriverPerformanceChartProps {
 const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   drivers,
 }) => {
-  // Detect and handle theme changes using matchMedia
   const [theme, setTheme] = useState<"lightTheme" | "darkTheme">(() => {
     if (typeof window !== "undefined" && window.matchMedia) {
       return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -30,7 +29,6 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
     }
   }, []);
 
-  // Normalize and prepare driver data for the chart
   const chartData = drivers
     .map((driver) => {
       const millis = driver?.millis ? parseInt(driver.millis, 10) : null;
@@ -51,7 +49,6 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       };
     });
 
-  // ECharts configuration
   const options = {
     backgroundColor: "transparent",
     tooltip: {
@@ -156,7 +153,7 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   };
 
   return (
-    <div className="w-full h-[calc(100vh-200px)] dark:bg-secondary-dark rounded-lg shadow-md p-4">
+    <div className="min-w-[600px] w-full h-[calc(100vh-200px)] dark:bg-secondary-dark rounded-lg shadow-lg p-4">
       <ReactECharts
         option={options}
         theme={theme}

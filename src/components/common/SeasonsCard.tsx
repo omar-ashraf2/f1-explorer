@@ -13,10 +13,10 @@ const SeasonsCard: React.FC<SeasonsCardProps> = ({ season, view, wikiUrl }) => {
   return (
     <div
       className={`relative w-full flex flex-col items-center justify-center mx-auto bg-secondary-dark text-text-light rounded-2xl p-4 transition-shadow shadow-md hover:shadow-xl group border-2 border-primary-dark overflow-hidden animate-fade-in ${
-        isCardView ? "h-60" : "h-30"
+        isCardView ? "h-48 md:h-60" : "h-30"
       }`}
     >
-      <h2 className="text-6xl font-black tracking-wide text-primary-light dark:text-primary-dark transition-transform group-hover:scale-110 font-orbitron">
+      <h2 className="text-3xl md:text-6xl font-black tracking-wide text-primary-light dark:text-primary-dark transition-transform group-hover:scale-110 font-orbitron">
         {season}
       </h2>
 

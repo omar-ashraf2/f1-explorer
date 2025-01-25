@@ -46,7 +46,7 @@ const Breadcrumbs: React.FC = () => {
         ) : (
           <Link
             to={`/${currentPath}`}
-            className="text-text-light dark:text-text-dark hover:text-primary-light dark:hover:text-primary-dark transition"
+            className="hover:text-primary-light dark:hover:text-primary-dark transition"
           >
             {readableLabel}
           </Link>
@@ -56,10 +56,10 @@ const Breadcrumbs: React.FC = () => {
   });
 
   return (
-    <nav className="flex items-center text-sm bg-secondary-light dark:bg-secondary-dark text-text-light dark:text-text-dark px-4 py-2 rounded-lg shadow-sm">
+    <nav className="flex items-center text-xs md:text-sm bg-secondary-light dark:bg-secondary-dark px-4 py-2 rounded-lg shadow-sm max-sm:flex-wrap">
       <Link
         to="/"
-        className="text-text-light dark:text-text-dark hover:text-primary-light dark:hover:text-primary-dark transition"
+        className="hover:text-primary-light dark:hover:text-primary-dark transition"
       >
         Home
       </Link>
