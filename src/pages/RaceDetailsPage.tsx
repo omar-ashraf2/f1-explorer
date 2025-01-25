@@ -26,54 +26,88 @@ const RaceDetailsPage: React.FC = () => {
 
   return (
     <div className="py-4">
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-lg p-6 mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between">
+      <div className="bg-gradient-to-r from-secondary-dark to-muted-light rounded-lg p-6 mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-2">{raceName}</h1>
-          <p className="text-lg text-gray-300 mb-1">
-            Circuit: {Circuit.circuitName}
+          <h1 className="text-4xl font-bold mb-2 text-primary-light dark:text-primary-dark font-orbitron">
+            {raceName}
+          </h1>
+          <p className="text-lg text-muted-dark mb-1">
+            {formatDate(date || "")} | {Circuit.circuitName}
           </p>
-          <p className="text-sm text-gray-400">
-            Round: {round} | Date: {formatDate(date || "")}
+          <p className="text-sm text-muted-light dark:text-muted-dark">
+            Round: {round}
           </p>
         </div>
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Participating Drivers</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto text-left border-collapse border border-gray-200 dark:border-gray-700">
-            <thead className="bg-gray-200 dark:bg-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
+          Participating Drivers
+        </h2>
+        <div className="overflow-x-auto rounded-lg shadow-md border border-accent-light dark:border-accent-dark">
+          <table className="w-full table-auto text-left">
+            <thead className="bg-gradient-to-r from-primary-light to-primary-dark text-white">
               <tr>
-                <th className="p-3 border-b">Position</th>
-                <th className="p-3 border-b">Driver</th>
-                <th className="p-3 border-b">Team</th>
-                <th className="p-3 border-b">Nationality</th>
-                <th className="p-3 border-b">Time</th>
+                {["Position", "Driver", "Team", "Nationality", "Time(s)"].map(
+                  (header, index) => (
+                    <th
+                      key={index}
+                      className="p-4 font-orbitron text-sm uppercase tracking-wider"
+                    >
+                      {header}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody>
-              {drivers.map((driver, index) => (
-                <tr
-                  key={`${driver.driverId}-${index}`}
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-100 dark:bg-gray-800" : ""
-                  } hover:bg-gray-200 dark:hover:bg-gray-700`}
-                >
-                  <td className="p-3 border-b font-bold">{driver.position}</td>
-                  <td className="p-3 border-b font-semibold">
-                    {`${driver.givenName} ${driver.familyName}`}
+              {drivers.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center p-6 text-muted-light">
+                    No drivers available for this race.
                   </td>
-                  <td className="p-3 border-b">{driver.team}</td>
-                  <td className="p-3 border-b">{driver.nationality}</td>
-                  <td className="p-3 border-b">{driver.time}</td>
                 </tr>
-              ))}
+              ) : (
+                drivers.map((driver, index) => (
+                  <tr
+                    key={`${driver.driverId}-${index}`}
+                    className={`${
+                      index % 2 === 0
+                        ? "bg-accent-light dark:bg-accent-dark"
+                        : ""
+                    } hover:bg-secondary-light dark:hover:bg-secondary-dark`}
+                  >
+                    <td className="p-3 border-b font-bold">
+                      {driver.position}
+                    </td>
+                    <td className="p-3 border-b font-semibold">
+                      {`${driver.givenName} ${driver.familyName}`}
+                    </td>
+                    <td className="p-3 border-b">{driver.team}</td>
+                    <td className="p-3 border-b">{driver.nationality}</td>
+                    <td
+                      className={`p-3 border-b font-semibold ${
+                        driver.status !== "Finished"
+                          ? "text-error"
+                          : "text-success"
+                      }`}
+                    >
+                      {driver.time}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      <DriverPerformanceChart drivers={drivers} />
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
+          Driver Performances Chart
+        </h2>
+        <DriverPerformanceChart drivers={drivers} />
+      </div>
     </div>
   );
 };

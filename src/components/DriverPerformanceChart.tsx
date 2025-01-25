@@ -1,12 +1,5 @@
 import ReactECharts from "echarts-for-react";
-
-interface Driver {
-  givenName: string;
-  familyName: string;
-  time: string;
-  status: string;
-  position: string;
-}
+import { Driver } from "../hooks/useRaceDetails";
 
 interface DriverPerformanceChartProps {
   drivers: Driver[];
@@ -15,14 +8,24 @@ interface DriverPerformanceChartProps {
 const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   drivers,
 }) => {
-  const chartData = drivers?.map((driver) => ({
-    name: `${driver.givenName} ${driver.familyName}`,
-    time:
-      driver.time === "N/A"
-        ? 0
-        : parseFloat(driver.time.replace(/[^0-9.]/g, "")),
-    status: driver.status || "N/A",
-    position: parseInt(driver.position, 10),
+  const normalizedData = drivers
+    .map((driver) => {
+      const millis = driver?.millis ? parseInt(driver.millis, 10) : null;
+      return {
+        name: `${driver.givenName} ${driver.familyName}`,
+        time: millis,
+        status: driver.status,
+        position: parseInt(driver.position, 10),
+      };
+    })
+    .sort((a, b) => a.position - b.position);
+
+  const winnerTime =
+    normalizedData.find((driver) => driver.time !== null)?.time || 0;
+
+  const chartData = normalizedData.map((driver) => ({
+    ...driver,
+    gap: driver.time !== null ? (driver.time - winnerTime) / 1000 : null,
   }));
 
   const options = {
@@ -33,7 +36,7 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       },
     },
     legend: {
-      data: ["Time (s)", "Position", "Status"],
+      data: ["Time Gap (s)", "Position"],
       textStyle: {
         color: "#333",
         fontSize: 12,
@@ -50,32 +53,69 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       data: chartData.map((driver) => driver.name),
       axisLabel: {
         rotate: 45,
-        fontSize: 10,
-        color: "#333",
+        fontSize: 12,
+        color: "#555",
+      },
+      axisTick: {
+        alignWithLabel: true,
       },
     },
-    yAxis: {
-      type: "value",
-      axisLabel: {
-        fontSize: 10,
-        color: "#333",
-      },
-    },
-    series: [
+    yAxis: [
       {
-        name: "Time (s)",
-        type: "bar",
-        data: chartData.map((driver) => driver.time),
-        itemStyle: {
-          color: "#8884d8",
+        type: "value",
+        name: "Time Gap (s)",
+        axisLabel: {
+          fontSize: 12,
+          color: "#555",
+        },
+        splitLine: {
+          lineStyle: {
+            type: "dashed",
+            color: "#ccc",
+          },
         },
       },
       {
+        type: "value",
         name: "Position",
+        inverse: false,
+        axisLabel: {
+          fontSize: 12,
+          color: "#555",
+        },
+        splitLine: {
+          lineStyle: {
+            type: "dashed",
+            color: "#ccc",
+          },
+        },
+      },
+    ],
+    series: [
+      {
+        name: "Time Gap (s)",
         type: "bar",
-        data: chartData.map((driver) => driver.position),
+        data: chartData.map((driver) =>
+          driver.gap !== null ? driver.gap : "-"
+        ),
         itemStyle: {
-          color: "#ffc658",
+          color: "#8884d8",
+        },
+        barMaxWidth: "30%",
+      },
+      {
+        name: "Position",
+        type: "line",
+        yAxisIndex: 1,
+        data: chartData.map((driver) => driver.position),
+        lineStyle: {
+          color: "#ff7300",
+          width: 2,
+        },
+        symbol: "circle",
+        symbolSize: 8,
+        itemStyle: {
+          color: "#ff7300",
         },
       },
       {
@@ -95,10 +135,7 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   };
 
   return (
-    <div className="w-full h-[calc(100vh-200px)] bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md p-4">
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-        Driver Performance Chart
-      </h2>
+    <div className="w-full h-[calc(100vh-200px)] dark:bg-secondary-dark rounded-lg shadow-md p-4">
       <ReactECharts
         option={options}
         style={{ height: "100%", width: "100%" }}

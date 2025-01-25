@@ -9,7 +9,8 @@ export type Driver = {
   nationality: string;
   team: string;
   position: string;
-  time: string;
+  time?: string;
+  millis?: string;
 };
 
 export type Circuit = {
@@ -34,6 +35,7 @@ export type Race = {
     status: string;
     Time?: {
       time: string;
+      millis: string;
     };
   }>;
 };
@@ -60,7 +62,8 @@ const fetchRaceDetails = async (
       nationality: driverData.Driver.nationality,
       team: driverData.Constructor.name,
       position: driverData.position,
-      time: driverData.Time?.time || "N/A",
+      time: driverData.Time?.time || "DNF",
+      millis: driverData.Time?.millis || "DNF",
       status: driverData.status,
     })) || [];
 
