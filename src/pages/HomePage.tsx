@@ -3,7 +3,7 @@ import HeroBackground from "../assets/bg_f1.webp";
 
 const HomePage: React.FC = () => {
   return (
-    <div className="flex flex-col bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
+    <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
       <header className="relative flex items-center justify-center h-screen overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
             Formula One Explorer
           </h1>
           <p className="text-lg md:text-xl max-w-2xl mb-10 font-orbitron font-semibold text-white drop-shadow-lg">
-            Dive into the world of Formula 1. Explore seasons, races, and
+            Dive into the world of Formula 1 <br /> Explore seasons, races, and
             drivers like never before.
           </p>
           <Link
@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
         </div>
       </header>
 
-      <section className="w-full py-12 bg-secondary-light dark:bg-secondary-dark">
+      <section className="w-full py-12 bg-secondary-light dark:bg-secondary-dark transition-colors">
         <h2 className="text-3xl font-bold text-center mb-8 text-text-light dark:text-text-dark font-orbitron">
           Features
         </h2>

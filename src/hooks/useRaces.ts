@@ -9,6 +9,7 @@ export type TRace = {
   };
   round: string;
   season: string;
+  url: string;
 };
 
 type FetchRacesResponse = {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import SeasonsCard from "../components/common/SeasonsCard";
-
 import { LoadingSpinner, Pagination, ViewToggle } from "../components/ui";
 import { useSeasons } from "../hooks/useSeasons";
 import ErrorPage from "./ErrorPage";
@@ -15,26 +14,20 @@ const SeasonsPage: React.FC = () => {
   const [view, setView] = useState<"list" | "card">("card");
   const limit = 15;
 
-  const { data, isLoading, isError } = useSeasons(page, limit);
+  const { data, isLoading, isFetching, isError } = useSeasons(page, limit);
 
-  if (isError) {
+  const { seasons = [], total = 0 } = data || {};
+  const totalPages = Math.ceil(total / limit);
+
+  if (isError || (!isLoading && seasons.length === 0)) {
     return (
       <ErrorPage message="An error occurred while fetching seasons. Please try again later." />
     );
   }
 
-  const { seasons = [], total = 0 } = data || {};
-  const totalPages = Math.ceil(total / limit);
-
-  if (!isLoading && seasons.length === 0) {
-    return (
-      <ErrorPage message="No seasons data is available at the moment. Please check back later." />
-    );
-  }
-
   return (
     <div className="py-4">
-      <h1 className="text-3xl font-bold mb-6 text-center font-orbitron">
+      <h1 className="text-4xl font-bold mb-6 text-center font-orbitron text-primary-light dark:text-primary-dark">
         Formula One Seasons
       </h1>
 
@@ -44,23 +37,23 @@ const SeasonsPage: React.FC = () => {
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}
+          isLoading={isLoading || isFetching}
         />
       </div>
 
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <LoadingSpinner />
       ) : (
         <div
-          className={`grid gap-6 ${
-            view === "list"
-              ? "grid-cols-1"
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+          className={`grid gap-4 ${
+            view === "list" ? "grid-cols-1" : "card-grid-seasons"
           }`}
         >
           {seasons.map((season: Season) => (
             <SeasonsCard
               key={season.season}
               season={season.season}
+              wikiUrl={season.url}
               view={view}
             />
           ))}

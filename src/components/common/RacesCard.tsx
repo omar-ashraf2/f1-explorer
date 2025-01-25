@@ -1,5 +1,9 @@
 import { HeartIcon as OutlineHeartIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowRightIcon,
+  LinkIcon,
+  HeartIcon as SolidHeartIcon,
+} from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { TRace } from "../../hooks/useRaces";
 import { formatDate } from "../../utils/dateFormatter";
@@ -17,39 +21,68 @@ const RacesCard: React.FC<RacesCardProps> = ({
   onPinToggle,
   isPinned,
 }) => {
+  const { raceName, Circuit, date, season, round, url: wikiUrl } = race;
+  const isCardView = view === "card";
+
   return (
     <div
-      className={`bg-[#0C141F] dark:bg-[#0b0b0a] text-white rounded-xl p-4 transition-shadow shadow-md hover:shadow-lg group animate-fade-in ${
-        view === "card" ? "border-r-2 border-b-2 border-primary-dark" : ""
-      }`}
+      className={`relative bg-secondary-dark text-text-light dark:text-text-dark rounded-2xl transition-shadow shadow-md hover:shadow-lg group animate-fade-in ${
+        isCardView
+          ? "border-r-2 border-b-2 border-primary-light dark:border-primary-dark"
+          : ""
+      } ${isCardView ? "h-52" : "h-40"}`}
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold group-hover:text-primary-light transition-colors">
-          {race.raceName}
+      <div className="flex justify-between items-center p-4">
+        <h2 className="text-2xl text-white font-bold font-orbitron group-hover:text-primary-dark transition-colors">
+          {raceName}
         </h2>
         <button
-          onClick={() => onPinToggle(race.round)}
+          onClick={() => onPinToggle(round)}
           className="p-2 rounded-md transition-transform transform hover:scale-110 focus:outline-none"
+          aria-label={isPinned ? "Unpin race" : "Pin race"}
         >
           {isPinned ? (
-            <SolidHeartIcon className="w-6 h-6 text-red-500" />
+            <SolidHeartIcon className="w-6 h-6 text-primary-light dark:text-primary-dark" />
           ) : (
-            <OutlineHeartIcon className="w-6 h-6 text-text-dark hover:text-primary-light" />
+            <OutlineHeartIcon className="w-6 h-6 text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark" />
           )}
         </button>
       </div>
-      <p className="text-sm text-gray-400 dark:text-gray-600">
-        {race.Circuit.circuitName}
-      </p>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        {formatDate(race.date)}
-      </p>
-      <Link
-        to={`/seasons/${race.season}/races/${race.round}`}
-        className="text-primary-light hover:text-primary-dark mt-4 inline-block"
+
+      <div className="px-4">
+        <p className="text-muted-dark mb-1">
+          {Circuit.circuitName}
+        </p>
+        <p className="text-muted-light">
+          {formatDate(date)}
+        </p>
+      </div>
+
+      <div
+        className={`absolute bottom-4 w-full flex ${
+          isCardView ? "justify-between px-4" : "justify-end right-4 space-x-3"
+        } items-center`}
       >
-        View Details →
-      </Link>
+        {wikiUrl && (
+          <a
+            href={wikiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="season-link"
+            title={`View ${raceName} on Wikipedia`}
+          >
+            <LinkIcon className="w-5 h-5 text-text-dark" />
+          </a>
+        )}
+
+        <Link
+          to={`/seasons/${season}/races/${round}`}
+          className="bg-primary-light dark:bg-primary-dark px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-primary-dark dark:hover:bg-primary-dark hover:scale-110 transition-all duration-300"
+        >
+          <span className="text-white text-xs font-semibold">View Details</span>
+          <ArrowRightIcon className="w-4 h-4 text-text-dark" />
+        </Link>
+      </div>
     </div>
   );
 };

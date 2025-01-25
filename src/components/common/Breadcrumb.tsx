@@ -32,13 +32,13 @@ const Breadcrumbs: React.FC = () => {
 
     return (
       <div key={currentPath} className="flex items-center">
-        <ChevronRightIcon className="w-4 h-4 text-gray-400 mx-2" />
+        <ChevronRightIcon className="w-4 h-4 text-muted-light dark:text-muted-dark mx-2" />
         {isLast || isRaceNumber || isSeasonNumber ? (
           <span
             className={`${
               isLast
                 ? "text-primary-light dark:text-primary-dark font-semibold"
-                : "text-gray-500 dark:text-gray-400"
+                : "text-muted-light dark:text-muted-dark"
             }`}
           >
             {readableLabel}
@@ -46,7 +46,7 @@ const Breadcrumbs: React.FC = () => {
         ) : (
           <Link
             to={`/${currentPath}`}
-            className="text-gray-700 dark:text-gray-200 hover:text-primary-light transition"
+            className="text-text-light dark:text-text-dark hover:text-primary-light dark:hover:text-primary-dark transition"
           >
             {readableLabel}
           </Link>
@@ -56,10 +56,10 @@ const Breadcrumbs: React.FC = () => {
   });
 
   return (
-    <nav className="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm">
+    <nav className="flex items-center text-sm bg-secondary-light dark:bg-secondary-dark text-text-light dark:text-text-dark px-4 py-2 rounded-lg shadow-sm">
       <Link
         to="/"
-        className="text-gray-700 dark:text-gray-200 hover:text-primary-light transition"
+        className="text-text-light dark:text-text-dark hover:text-primary-light dark:hover:text-primary-dark transition"
       >
         Home
       </Link>

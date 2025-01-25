@@ -9,7 +9,7 @@ const ThemeToggle: React.FC = () => {
       onClick={toggleTheme}
       aria-label="Toggle between light and dark mode"
       aria-pressed={theme === "dark"}
-      className="bg-gray-200 dark:bg-background-dark text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-md hover:scale-105 transition-transform"
+      className="bg-accent-light text-gray-800 p-2 rounded-full shadow-md hover:scale-105 transition-transform"
     >
       {theme === "light" ? (
         <MoonIcon className="h-6 w-6" />

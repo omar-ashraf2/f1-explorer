@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import RacesCard from "../components/common/RacesCard";
@@ -11,9 +11,13 @@ const RacesPage: React.FC = () => {
   const { season } = useParams<{ season: string }>();
   const [page, setPage] = useState<number>(0);
   const [view, setView] = useState<"list" | "card">("card");
-  const limit = 15;
+  const limit = 12;
 
-  const { data, isLoading, isError } = useRaces(season || "", page, limit);
+  const { data, isLoading, isFetching, isError } = useRaces(
+    season || "",
+    page,
+    limit
+  );
   const { pinnedRaces, addPinnedRace, removePinnedRace, clearPinnedRaces } =
     usePinnedRaces();
 
@@ -27,13 +31,7 @@ const RacesPage: React.FC = () => {
     setVisiblePinnedRaces(seasonPinnedRaces);
   }, [pinnedRaces, season]);
 
-  if (!isLoading && races.length === 0) {
-    return (
-      <ErrorPage message="No races data is available for this season. Please check back later." />
-    );
-  }
-
-  if (isError) {
+  if (isError || (!isLoading && races.length === 0)) {
     return (
       <ErrorPage message="An error occurred while fetching races. Please try again later." />
     );
@@ -64,7 +62,7 @@ const RacesPage: React.FC = () => {
 
   return (
     <div className="py-4">
-      <h1 className="text-3xl font-bold mb-6 text-center font-orbitron">
+      <h1 className="text-4xl font-bold mb-6 text-center font-orbitron text-primary-light dark:text-primary-dark">
         Races for {season} Season
       </h1>
 
@@ -74,12 +72,13 @@ const RacesPage: React.FC = () => {
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}
+          isLoading={isLoading || isFetching}
         />
       </div>
 
       {pinnedRacesData.length > 0 && (
         <div className="mb-4 flex justify-between items-center">
-          <h2 className="text-xl font-bold">Pinned Races</h2>
+          <h2 className="text-2xl font-bold">Favorite Races</h2>
           <button
             onClick={() => {
               clearPinnedRaces(season || "");
@@ -92,16 +91,16 @@ const RacesPage: React.FC = () => {
         </div>
       )}
 
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <LoadingSpinner />
       ) : (
         <>
           {pinnedRacesData.length > 0 && (
             <div className="mb-4">
               <div
-                className={`grid gap-6 ${
+                className={`grid gap-4 ${
                   view === "list"
-                    ? "grid-cols-1"
+                    ? "grid-cols-1 sm:grid-cols-2"
                     : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                 }`}
               >
@@ -119,12 +118,10 @@ const RacesPage: React.FC = () => {
           )}
 
           <div>
-            <h2 className="text-xl font-bold mb-4">All Races</h2>
+            <h2 className="text-2xl font-bold mb-4">All Races</h2>
             <div
-              className={`grid gap-6 ${
-                view === "list"
-                  ? "grid-cols-1"
-                  : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+              className={`grid gap-4 ${
+                view === "list" ? "grid-cols-1" : "card-grid-races"
               }`}
             >
               {otherRacesData.map((race) => (

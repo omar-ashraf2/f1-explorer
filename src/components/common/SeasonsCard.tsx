@@ -1,40 +1,50 @@
+import { ArrowRightIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import CardImage from "../../assets/f1Card.jpg";
 
 type SeasonsCardProps = {
   season: string;
   view: "list" | "card";
+  wikiUrl: string;
 };
 
-const SeasonsCard: React.FC<SeasonsCardProps> = ({ season, view }) => {
+const SeasonsCard: React.FC<SeasonsCardProps> = ({ season, view, wikiUrl }) => {
+  const isCardView = view === "card";
+
   return (
-    <Link
-      to={`/seasons/${season}/races`}
-      className="relative flex items-center justify-between bg-[#0C141F] dark:bg-[#0b0b0a] text-white rounded-xl p-4 transition-shadow shadow-md hover:shadow-lg group border-r-2 border-b-2 border-primary-dark overflow-hidden"
+    <div
+      className={`relative w-full flex flex-col items-center justify-center mx-auto bg-secondary-dark text-text-light rounded-2xl p-4 transition-shadow shadow-md hover:shadow-xl group border-2 border-primary-dark overflow-hidden animate-fade-in ${
+        isCardView ? "h-60" : "h-30"
+      }`}
     >
-      <div className="z-10">
-        <h2 className="text-2xl font-bold group-hover:text-primary-dark transition-colors">
-          {season}
-        </h2>
-        <p className="text-sm text-gray-400 dark:text-gray-600">
-          Explore races
-        </p>
-      </div>
+      <h2 className="text-6xl font-black tracking-wide text-primary-light dark:text-primary-dark transition-transform group-hover:scale-110 font-orbitron">
+        {season}
+      </h2>
 
       <div
-        className={`absolute right-0 top-0 h-full ${
-          view === "list" ? "sm:w-1/6 w-1/2" : "sm:w-2/5 w-1/2"
-        }  bg-cover bg-right opacity-20 group-hover:opacity-30 transition-opacity`}
-        style={{
-          backgroundImage: `url(${CardImage})`,
-        }}
-      ></div>
-
-      <div className="flex items-center z-10">
-        <ArrowRightIcon className="w-6 h-6 ml-2 text-primary-light group-hover:text-primary-dark transition-colors" />
+        className={`absolute ${
+          isCardView ? "bottom-4" : "bottom-1/2 translate-y-1/2"
+        } flex w-full justify-between items-center px-7`}
+      >
+        {wikiUrl && (
+          <a
+            href={wikiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="season-link"
+            title={`View season ${season} on Wikipedia`}
+          >
+            <LinkIcon className="w-5 h-5 text-text-dark" />
+          </a>
+        )}
+        <Link
+          to={`/seasons/${season}/races`}
+          className="season-link"
+          title="Go to Season Races"
+        >
+          <ArrowRightIcon className="w-5 h-5 text-text-dark" />
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 

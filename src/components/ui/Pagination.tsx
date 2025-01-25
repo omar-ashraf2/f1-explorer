@@ -4,31 +4,39 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (newPage: number) => void;
+  isLoading: boolean;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
+  isLoading,
 }) => {
   return (
     <div className="flex justify-end items-center space-x-4 font-orbitron">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 0}
-        className="p-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+        disabled={currentPage === 0 || isLoading}
+        className="pagination-button"
       >
-        <ChevronLeftIcon className="w-6 h-6" />
+        <ChevronLeftIcon className="w-6 h-6 text-text-light dark:text-text-dark" />
       </button>
+
       <span>
-        Page {currentPage + 1} of {totalPages}
+        Page{" "}
+        <span className="text-primary-light dark:text-primary-dark">
+          {currentPage + 1}
+        </span>{" "}
+        of {totalPages}
       </span>
+
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage + 1 === totalPages}
-        className="p-2 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+        disabled={currentPage + 1 === totalPages || isLoading}
+        className="pagination-button"
       >
-        <ChevronRightIcon className="w-6 h-6" />
+        <ChevronRightIcon className="w-6 h-6 text-text-light dark:text-text-dark" />
       </button>
     </div>
   );
