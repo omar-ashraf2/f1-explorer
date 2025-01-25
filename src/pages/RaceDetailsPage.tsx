@@ -77,18 +77,16 @@ const RaceDetailsPage: React.FC = () => {
                         : ""
                     } hover:bg-secondary-light dark:hover:bg-secondary-dark`}
                   >
-                    <td className="p-3 border-b font-bold">
-                      {driver.position}
-                    </td>
-                    <td className="p-3 border-b font-semibold">
+                    <td className="p-3 font-bold">{driver.position}</td>
+                    <td className="p-3 font-semibold">
                       {`${driver.givenName} ${driver.familyName}`}
                     </td>
-                    <td className="p-3 border-b">{driver.team}</td>
-                    <td className="p-3 border-b">{driver.nationality}</td>
+                    <td className="p-3">{driver.team}</td>
+                    <td className="p-3">{driver.nationality}</td>
                     <td
-                      className={`p-3 border-b font-semibold ${
+                      className={`p-3 font-semibold ${
                         driver.status !== "Finished"
-                          ? "text-error"
+                          ? "text-primary-dark"
                           : "text-success"
                       }`}
                     >
