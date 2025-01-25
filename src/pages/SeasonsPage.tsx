@@ -21,7 +21,7 @@ const SeasonsPage: React.FC = () => {
 
   if (isError || (!isLoading && seasons.length === 0)) {
     return (
-      <ErrorPage message="An error occurred while fetching seasons. Please try again later." />
+      <ErrorPage customMessage="An error occurred while fetching seasons. Please try again later." />
     );
   }
 

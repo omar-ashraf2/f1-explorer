@@ -10,20 +10,24 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   drivers,
 }) => {
   // Detect and handle theme changes using matchMedia
-  const [theme, setTheme] = useState<"lightTheme" | "darkTheme">(
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "darkTheme"
-      : "lightTheme"
-  );
+  const [theme, setTheme] = useState<"lightTheme" | "darkTheme">(() => {
+    if (typeof window !== "undefined" && window.matchMedia) {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "darkTheme"
+        : "lightTheme";
+    }
+    return "lightTheme";
+  });
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const themeListener = (e: MediaQueryListEvent) => {
-      setTheme(e.matches ? "darkTheme" : "lightTheme");
-    };
-    mediaQuery.addEventListener("change", themeListener);
-
-    return () => mediaQuery.removeEventListener("change", themeListener);
+    if (typeof window !== "undefined" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = () => {
+        setTheme(mediaQuery.matches ? "darkTheme" : "lightTheme");
+      };
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
   }, []);
 
   // Normalize and prepare driver data for the chart

@@ -33,7 +33,7 @@ const RacesPage: React.FC = () => {
 
   if (isError || (!isLoading && races.length === 0)) {
     return (
-      <ErrorPage message="An error occurred while fetching races. Please try again later." />
+      <ErrorPage customMessage="An error occurred while fetching races. Please try again later." />
     );
   }
 

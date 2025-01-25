@@ -14,7 +14,7 @@ const RaceDetailsPage: React.FC = () => {
 
   if (isError) {
     return (
-      <ErrorPage message="An error occurred while fetching race details. Please try again later." />
+      <ErrorPage customMessage="An error occurred while fetching race details. Please try again later." />
     );
   }
 

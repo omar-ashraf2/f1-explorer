@@ -1,8 +1,8 @@
 import { Outlet, useLocation, useNavigation } from "react-router-dom";
-import Breadcrumbs from "./common/Breadcrumb";
-import Footer from "./common/Footer";
-import Navbar from "./common/Navbar";
-import { LoadingSpinner } from "./ui";
+import Breadcrumbs from "../common/Breadcrumb";
+import Footer from "../common/Footer";
+import Navbar from "../common/Navbar";
+import { LoadingSpinner } from ".";
 
 const Layout: React.FC = () => {
   const navigation = useNavigation();

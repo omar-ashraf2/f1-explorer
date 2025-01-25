@@ -1,5 +1,5 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
-import { Link, useRouteError } from "react-router-dom";
+import { useRouteError } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
 interface RouteError {
@@ -8,15 +8,18 @@ interface RouteError {
   message?: string;
 }
 
-const ErrorPage: React.FC<{ message?: string }> = ({ message }) => {
-  const { theme } = useTheme();
+interface ErrorPageProps {
+  customMessage?: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ customMessage }) => {
   const routeError = useRouteError() as RouteError;
-  const status = routeError?.status || "Error";
-  const statusMessage =
-    message ||
-    routeError?.statusText ||
-    routeError?.message ||
-    "Something went wrong.";
+  const { theme } = useTheme();
+
+  const statusCode = routeError?.status || 500;
+  const statusText = routeError?.statusText || "Something went wrong.";
+  const message =
+    customMessage || routeError?.message || "Please try again later.";
 
   return (
     <div
@@ -24,21 +27,23 @@ const ErrorPage: React.FC<{ message?: string }> = ({ message }) => {
         theme === "dark"
           ? "bg-gray-900 text-gray-100"
           : "bg-gray-100 text-gray-900"
-      } transition-colors px-4`}
+      }`}
     >
       <ExclamationCircleIcon className="h-20 w-20 text-red-500 mb-6 animate-pulse" />
-      <h1 className="text-5xl font-bold mb-4">{status}</h1>
-      <p className="text-lg mb-6">{statusMessage}</p>
+
+      <h1 className="text-5xl font-bold mb-4">{statusCode}</h1>
+      <p className="text-lg mb-6">{statusText}</p>
+      {message && <p className="text-lg mb-6">{message}</p>}
       <div className="flex gap-4">
-        <Link
-          to="/"
+        <a
+          href="/"
           className="px-6 py-3 bg-primary-light text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors"
         >
           Go to Home
-        </Link>
+        </a>
         <button
-          onClick={() => window.location.reload()}
           className="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+          onClick={() => window.location.reload()}
         >
           Retry
         </button>
