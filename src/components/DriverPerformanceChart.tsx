@@ -55,12 +55,14 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       axisPointer: { type: "shadow" },
     },
     legend: {
-      data: ["Time Gap (s)", "Position"],
+      data: [
+        { name: "Time Gap (s)", icon: "rect" },
+        { name: "Position", icon: "circle" },
+      ],
       textStyle: {
         color: "inherit",
         fontSize: 12,
       },
-      padding: 10,
     },
     grid: {
       left: "5%",
@@ -89,23 +91,13 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
         splitLine: {
           lineStyle: {
             type: "dashed",
-            color: theme === "darkTheme" ? "#2B2B2F" : "#E5E5E5",
           },
         },
+        min: 0,
       },
       {
         type: "value",
         name: "Position",
-        axisLabel: {
-          fontSize: 12,
-          color: theme === "darkTheme" ? "#A5A5A5" : "#555",
-        },
-        splitLine: {
-          lineStyle: {
-            type: "dashed",
-            color: theme === "darkTheme" ? "#454548" : "#E5E5E5",
-          },
-        },
       },
     ],
     series: [
@@ -119,16 +111,36 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       {
         name: "Position",
         type: "line",
-        yAxisIndex: 1,
+        yAxisIndex: 0,
         data: chartData.map((driver) => driver.position),
         lineStyle: { color: "#ff7300", width: 2 },
         symbol: "circle",
-        symbolSize: 8,
-        itemStyle: { color: "#ff7300" },
+        symbolSize: 10,
+        itemStyle: {
+          color: (params: { dataIndex: number }) => {
+            const { dataIndex } = params;
+            if (dataIndex === 0) return "#FFD700";
+            if (dataIndex === 1) return "#C0C0C0";
+            if (dataIndex === 2) return "#CD7F32";
+            return "#ff7300";
+          },
+        },
+        label: {
+          show: true,
+          position: "top",
+          formatter: (params: { dataIndex: number }) =>
+            params.dataIndex === 0
+              ? "🥇"
+              : params.dataIndex === 1
+              ? "🥈"
+              : params.dataIndex === 2
+              ? "🥉"
+              : "",
+        },
       },
       {
         name: "Status",
-        type: "bar",
+        type: "line",
         data: chartData.map((driver) => ({
           value: driver.status,
           itemStyle: {
