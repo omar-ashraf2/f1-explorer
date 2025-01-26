@@ -8,27 +8,30 @@ import {
   ViewToggle,
 } from "../components";
 import { usePinnedRaces } from "../context/PinnedRacesContext";
+import { usePagination } from "../hooks/usePagination";
 import { useRaces } from "../hooks/useRaces";
 import ErrorPage from "./ErrorPage";
 
 const RacesPage: React.FC = () => {
   const { season } = useParams<{ season: string }>();
-  const [page, setPage] = useState<number>(0);
   const [view, setView] = useState<"list" | "card">("card");
   const limit = 12;
 
   const { data, isLoading, isFetching, isError } = useRaces(
     season || "",
-    page,
     limit
   );
+
+  const { races = [], total = 0 } = data || {};
+
+  const { page, totalPages, setPage } = usePagination({
+    total,
+    limit,
+  });
   const { pinnedRaces, addPinnedRace, removePinnedRace, clearPinnedRaces } =
     usePinnedRaces();
 
   const [visiblePinnedRaces, setVisiblePinnedRaces] = useState<string[]>([]);
-
-  const { races = [], total = 0 } = data || {};
-  const totalPages = Math.ceil(total / limit);
 
   useEffect(() => {
     const seasonPinnedRaces = pinnedRaces[season || ""] || [];

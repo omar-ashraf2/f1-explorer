@@ -1,30 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../api/axiosInstance";
+import { useSearchParams } from "react-router-dom";
+import { fetchSeasons, FetchSeasonsResponse } from "../api/seasonsApi";
 
-type FetchSeasonsResponse = {
-  seasons: { season: string; url: string }[];
-  total: number;
-};
+export const useSeasons = (limit: number) => {
+  const [searchParams] = useSearchParams();
 
-const fetchSeasons = async (
-  page: number,
-  limit: number
-): Promise<FetchSeasonsResponse> => {
-  const offset = page * limit;
-  const response = await axiosInstance.get(`/seasons.json`, {
-    params: { limit, offset },
-  });
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
 
-  return {
-    seasons: response.data.MRData.SeasonTable.Seasons,
-    total: parseInt(response.data.MRData.total, 10),
-  };
-};
+  const offset = (page - 1) * limit;
 
-export const useSeasons = (page: number, limit: number) => {
-  return useQuery(["seasons", page], () => fetchSeasons(page, limit), {
-    staleTime: 5 * 60 * 1000,
-    keepPreviousData: true,
-    refetchOnWindowFocus: false,
-  });
+  return useQuery<FetchSeasonsResponse>(
+    ["seasons", page],
+    () => fetchSeasons(offset, limit),
+    {
+      staleTime: 5 * 60 * 1000,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
+  );
 };

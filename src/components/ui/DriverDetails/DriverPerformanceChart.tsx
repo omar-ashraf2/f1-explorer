@@ -1,6 +1,7 @@
 import ReactECharts from "echarts-for-react";
-import { useEffect, useState } from "react";
-import { Driver } from "../../hooks/useRaceDetails";
+import { Driver } from "../../../api/raceDetailsApi";
+import { useTheme } from "../../../context/ThemeContext";
+import { transformDriverData } from "../../../utils/chartUtils";
 
 interface DriverPerformanceChartProps {
   drivers: Driver[];
@@ -9,45 +10,9 @@ interface DriverPerformanceChartProps {
 const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   drivers,
 }) => {
-  const [theme, setTheme] = useState<"lightTheme" | "darkTheme">(() => {
-    if (typeof window !== "undefined" && window.matchMedia) {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "darkTheme"
-        : "lightTheme";
-    }
-    return "lightTheme";
-  });
+  const { theme } = useTheme();
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia) {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = () => {
-        setTheme(mediaQuery.matches ? "darkTheme" : "lightTheme");
-      };
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }
-  }, []);
-
-  const chartData = drivers
-    .map((driver) => {
-      const millis = driver?.millis ? parseInt(driver.millis, 10) : null;
-      const position = parseInt(driver.position, 10);
-      return {
-        name: `${driver.givenName} ${driver.familyName}`,
-        time: millis,
-        status: driver.status || "N/A",
-        position,
-      };
-    })
-    .sort((a, b) => a.position - b.position)
-    .map((driver, _, arr) => {
-      const winnerTime = arr.find((d) => d.time !== null)?.time || 0;
-      return {
-        ...driver,
-        gap: driver.time !== null ? (driver.time - winnerTime) / 1000 : null,
-      };
-    });
+  const chartData = transformDriverData(drivers);
 
   const options = {
     backgroundColor: "transparent",
@@ -77,7 +42,7 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
       axisLabel: {
         rotate: 45,
         fontSize: 12,
-        color: theme === "darkTheme" ? "#A5A5A5" : "#555",
+        color: theme === "dark" ? "#A5A5A5" : "#555",
       },
       axisTick: { alignWithLabel: true },
     },
@@ -87,11 +52,12 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
         name: "Time Gap (s)",
         axisLabel: {
           fontSize: 12,
-          color: theme === "darkTheme" ? "#A5A5A5" : "#555",
+          color: theme === "dark" ? "#A5A5A5" : "#555",
         },
         splitLine: {
           lineStyle: {
             type: "dashed",
+            color: theme === "dark" ? "#a5a5a54d" : "#5555554f",
           },
         },
         min: 0,
@@ -153,7 +119,7 @@ const DriverPerformanceChart: React.FC<DriverPerformanceChartProps> = ({
   };
 
   return (
-    <div className="min-w-[600px] w-full h-[calc(100vh-200px)] dark:bg-secondary-dark rounded-lg shadow-lg p-4">
+    <div className="min-w-[600px] w-full h-[calc(100vh-200px)] bg-accent-light dark:bg-secondary-dark rounded-lg shadow-lg p-4">
       <ReactECharts
         option={options}
         theme={theme}

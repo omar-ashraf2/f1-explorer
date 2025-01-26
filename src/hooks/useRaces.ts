@@ -1,42 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../api/axiosInstance";
+import { useSearchParams } from "react-router-dom";
+import { fetchRaces, FetchRacesResponse } from "../api/racesApi";
 
-export type TRace = {
-  raceName: string;
-  date: string;
-  Circuit: {
-    circuitName: string;
-  };
-  round: string;
-  season: string;
-  url: string;
-};
+export const useRaces = (season: string, limit: number) => {
+  const [searchParams] = useSearchParams();
 
-type FetchRacesResponse = {
-  races: TRace[];
-  total: number;
-};
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
 
-const fetchRaces = async (
-  season: string,
-  page: number,
-  limit: number
-): Promise<FetchRacesResponse> => {
-  const offset = page * limit;
-  const response = await axiosInstance.get(`/${season}/races.json`, {
-    params: { limit, offset },
-  });
+  const offset = (page - 1) * limit;
 
-  return {
-    races: response.data.MRData.RaceTable.Races,
-    total: parseInt(response.data.MRData.total, 10),
-  };
-};
-
-export const useRaces = (season: string, page: number, limit: number) => {
   return useQuery<FetchRacesResponse>(
     ["races", season, page],
-    () => fetchRaces(season, page, limit),
+    () => fetchRaces(season, offset, limit),
     {
       keepPreviousData: true,
       staleTime: 5 * 60 * 1000,

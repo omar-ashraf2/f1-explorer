@@ -1,11 +1,17 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { DriverPerformanceChart, LoadingSpinner } from "../components";
+import {
+  DriverPerformanceChart,
+  DriverTable,
+  LoadingSpinner,
+} from "../components";
 import { useRaceDetails } from "../hooks/useRaceDetails";
 import { formatDate } from "../utils/dateFormatter";
 import ErrorPage from "./ErrorPage";
 
 const RaceDetailsPage: React.FC = () => {
   const { season, round } = useParams<{ season: string; round: string }>();
+  const [highlightedDriver, setHighlightedDriver] = useState<string>("");
   const { data, isLoading, isError } = useRaceDetails(
     season || "",
     round || ""
@@ -43,71 +49,20 @@ const RaceDetailsPage: React.FC = () => {
         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
           Participating Drivers
         </h2>
-        <div className="overflow-x-auto rounded-lg shadow-md border border-accent-light dark:border-accent-dark">
-          <table className="w-full table-auto text-left">
-            <thead className="bg-gradient-to-r from-primary-light to-primary-dark text-white">
-              <tr>
-                {["Position", "Driver", "Team", "Nationality", "Time(s)"].map(
-                  (header, index) => (
-                    <th
-                      key={index}
-                      className="p-4 font-orbitron text-xs sm:text-sm uppercase tracking-wider"
-                    >
-                      {header}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {drivers.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-center p-6 text-muted-light">
-                    No drivers available for this race.
-                  </td>
-                </tr>
-              ) : (
-                drivers.map((driver, index) => (
-                  <tr
-                    key={`${driver.driverId}-${index}`}
-                    className={`${
-                      index % 2 === 0
-                        ? "bg-accent-light dark:bg-accent-dark"
-                        : ""
-                    } hover:bg-secondary-light dark:hover:bg-secondary-dark`}
-                  >
-                    <td className="p-3 text-xs sm:text-sm font-bold">
-                      {driver.position}
-                    </td>
-                    <td className="p-3 text-xs sm:text-sm font-semibold">
-                      {`${driver.givenName} ${driver.familyName}`}
-                    </td>
-                    <td className="p-3 text-xs sm:text-sm">{driver.team}</td>
-                    <td className="p-3 text-xs sm:text-sm">
-                      {driver.nationality}
-                    </td>
-                    <td
-                      className={`p-3 text-xs sm:text-sm font-semibold ${
-                        driver.status !== "Finished"
-                          ? "text-primary-dark"
-                          : "text-success"
-                      }`}
-                    >
-                      {driver.time}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DriverTable
+          drivers={drivers}
+          highlightedDriver={highlightedDriver}
+          onHighlight={setHighlightedDriver}
+        />
       </div>
 
-      <div className="overflow-x-auto">
+      <div>
         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-primary-light dark:text-primary-dark">
           Driver Performances Chart
         </h2>
-        <DriverPerformanceChart drivers={drivers} />
+        <div className="overflow-x-auto">
+          <DriverPerformanceChart drivers={drivers} />
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import {
   HeartIcon as SolidHeartIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { TRace } from "../../hooks/useRaces";
+import { TRace } from "../../api/racesApi";
 import { formatDate } from "../../utils/dateFormatter";
 
 type RacesCardProps = {

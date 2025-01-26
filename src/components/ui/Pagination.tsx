@@ -17,26 +17,23 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="flex justify-end items-center space-x-4 font-orbitron">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 0 || isLoading}
+        disabled={currentPage === 1 || isLoading}
         className="pagination-button"
       >
-        <ChevronLeftIcon className="w-6 h-6 text-text-light dark:text-text-dark" />
+        <ChevronLeftIcon className="w-6 h-6" />
       </button>
 
       <span>
-        Page{" "}
-        <span className="text-primary-light dark:text-primary-dark">
-          {currentPage + 1}
-        </span>{" "}
-        of {totalPages}
+        Page <strong className="text-primary-light">{currentPage}</strong> of{" "}
+        <strong>{totalPages}</strong>
       </span>
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage + 1 === totalPages || isLoading}
+        disabled={currentPage === totalPages || isLoading}
         className="pagination-button"
       >
-        <ChevronRightIcon className="w-6 h-6 text-text-light dark:text-text-dark" />
+        <ChevronRightIcon className="w-6 h-6" />
       </button>
     </div>
   );

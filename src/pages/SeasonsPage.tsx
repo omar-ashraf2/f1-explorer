@@ -5,6 +5,7 @@ import {
   SeasonsCard,
   ViewToggle,
 } from "../components";
+import { usePagination } from "../hooks/usePagination";
 import { useSeasons } from "../hooks/useSeasons";
 import ErrorPage from "./ErrorPage";
 
@@ -14,14 +15,15 @@ type Season = {
 };
 
 const SeasonsPage: React.FC = () => {
-  const [page, setPage] = useState<number>(0);
   const [view, setView] = useState<"list" | "card">("card");
   const limit = 15;
-
-  const { data, isLoading, isFetching, isError } = useSeasons(page, limit);
-
+  const { data, isLoading, isFetching, isError } = useSeasons(limit);
   const { seasons = [], total = 0 } = data || {};
-  const totalPages = Math.ceil(total / limit);
+
+  const { page, totalPages, setPage } = usePagination({
+    total,
+    limit,
+  });
 
   if (isError || (!isLoading && seasons.length === 0)) {
     return (
