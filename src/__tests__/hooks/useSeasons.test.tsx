@@ -1,5 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
 import { useSeasons } from "../../hooks/useSeasons";
 import axiosInstance from "../../api/axiosInstance";
 import { vi } from "vitest";
@@ -38,11 +39,13 @@ describe("useSeasons", () => {
 
     const queryClient = createQueryClient();
 
-    const { result } = renderHook(() => useSeasons(0, 10), {
+    const { result } = renderHook(() => useSeasons(10), {
       wrapper: ({ children }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <MemoryRouter>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </MemoryRouter>
       ),
     });
 
@@ -61,11 +64,13 @@ describe("useSeasons", () => {
 
     const queryClient = createQueryClient();
 
-    const { result } = renderHook(() => useSeasons(0, 10), {
+    const { result } = renderHook(() => useSeasons(10), {
       wrapper: ({ children }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <MemoryRouter>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </MemoryRouter>
       ),
     });
 

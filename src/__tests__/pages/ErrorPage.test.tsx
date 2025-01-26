@@ -77,7 +77,7 @@ describe("ErrorPage", () => {
     );
 
     const errorPage = screen.getByRole("heading", { level: 1 }).parentElement;
-    expect(errorPage).toHaveClass("bg-gray-100 text-gray-900");
+    expect(errorPage).toHaveClass("bg-secondary-light text-secondary-dark");
   });
 
   test("renders correct theme classes for dark mode", () => {
@@ -93,10 +93,10 @@ describe("ErrorPage", () => {
     );
 
     const errorPage = screen.getByRole("heading", { level: 1 }).parentElement;
-    expect(errorPage).toHaveClass("bg-gray-900 text-gray-100");
+    expect(errorPage).toHaveClass("bg-secondary-dark text-secondary-light");
   });
 
-  test("Go to Home button navigates to home", () => {
+  test("Home Page button navigates to home", () => {
     (useRouteError as Mock).mockReturnValue({});
     (useTheme as Mock).mockReturnValue({
       theme: "light",
@@ -108,7 +108,7 @@ describe("ErrorPage", () => {
       </MemoryRouter>
     );
 
-    const homeButton = screen.getByText(/Go to Home/i);
+    const homeButton = screen.getByText(/Home Page/i);
     expect(homeButton).toBeInTheDocument();
 
     fireEvent.click(homeButton);
