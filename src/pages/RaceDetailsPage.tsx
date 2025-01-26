@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
-import DriverPerformanceChart from "../components/DriverPerformanceChart";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { DriverPerformanceChart, LoadingSpinner } from "../components";
 import { useRaceDetails } from "../hooks/useRaceDetails";
 import { formatDate } from "../utils/dateFormatter";
 import ErrorPage from "./ErrorPage";

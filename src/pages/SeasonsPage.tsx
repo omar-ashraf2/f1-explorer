@@ -1,6 +1,10 @@
 import { useState } from "react";
-import SeasonsCard from "../components/common/SeasonsCard";
-import { LoadingSpinner, Pagination, ViewToggle } from "../components/ui";
+import {
+  LoadingSpinner,
+  Pagination,
+  SeasonsCard,
+  ViewToggle,
+} from "../components";
 import { useSeasons } from "../hooks/useSeasons";
 import ErrorPage from "./ErrorPage";
 

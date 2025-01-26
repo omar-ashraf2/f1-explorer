@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ThemeToggle from "../ui/ThemeToggle";
+import ThemeToggle from "./ThemeToggle";
 interface NavbarProps {
   isHome: boolean;
 }

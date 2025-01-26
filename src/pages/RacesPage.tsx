@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import RacesCard from "../components/common/RacesCard";
-import { LoadingSpinner, Pagination, ViewToggle } from "../components/ui";
+import {
+  LoadingSpinner,
+  Pagination,
+  RacesCard,
+  ViewToggle,
+} from "../components";
 import { usePinnedRaces } from "../context/PinnedRacesContext";
 import { useRaces } from "../hooks/useRaces";
 import ErrorPage from "./ErrorPage";
@@ -80,7 +84,7 @@ const RacesPage: React.FC = () => {
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Favorite Races</h2>
           <button
-          title="Clear All Pinned Races For This Season"
+            title="Clear All Pinned Races For This Season"
             onClick={() => {
               clearPinnedRaces(season || "");
               setVisiblePinnedRaces([]);

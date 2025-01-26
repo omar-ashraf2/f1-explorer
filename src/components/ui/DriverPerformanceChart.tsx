@@ -1,6 +1,6 @@
 import ReactECharts from "echarts-for-react";
 import { useEffect, useState } from "react";
-import { Driver } from "../hooks/useRaceDetails";
+import { Driver } from "../../hooks/useRaceDetails";
 
 interface DriverPerformanceChartProps {
   drivers: Driver[];

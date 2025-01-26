@@ -50,12 +50,8 @@ const RacesCard: React.FC<RacesCardProps> = ({
       </div>
 
       <div className="px-4">
-        <p className="text-muted-dark mb-1">
-          {Circuit.circuitName}
-        </p>
-        <p className="text-muted-light">
-          {formatDate(date)}
-        </p>
+        <p className="text-muted-dark mb-1">{Circuit.circuitName}</p>
+        <p className="text-muted-light">{formatDate(date)}</p>
       </div>
 
       <div
